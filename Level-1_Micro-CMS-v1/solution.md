@@ -107,6 +107,10 @@ I decided to test if HTML/JavaScript could be embedded despite the warning. Firs
 ```html
 <input type="button" id="myButton" value="Click Me!">
 ```
+This button did not do much but then i tried creating another button:
+```
+<button onclick=alert('Test Hello')>Click</button>
+```
 
 ![ButtonJS](ButtonJS.png)
 *Creating a button element to test script execution*
