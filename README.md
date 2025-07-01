@@ -51,18 +51,14 @@ Welcome to my comprehensive collection of solutions and walkthroughs for [Hacker
 
 ```
 📦 hacker101-ctf-solutions/
-├── 📁 trivial/
-│   ├── 📁 a-little-something/
+├── ├── 📁 a-little-something/
 │   │   ├── solution.md
 │   │   └── screenshots/
 │   └── 📁 micro-cms-v1/
 │       ├── solution.md
 │       └── screenshots/
-├── 📁 easy/
-│   ├── 📁 micro-cms-v2/
-│   └── 📁 encrypted-pastebin/
-├── 📁 moderate/
-└── 📁 hard/
+├
+│   And etc
 ```
 
 Each challenge folder contains:
