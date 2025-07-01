@@ -4,15 +4,7 @@ This repository contains my walkthroughs and solutions for the challenges on [Ha
 
 > 📌 Note: These writeups are for educational purposes only. Please try solving the challenges on your own first!
 
----
-
-## ✅ Completed Levels
-
-| Level | Challenge Name                        | Difficulty | Flags | Status   |
-|-------|----------------------------------------|------------|--------|-----------|
-| 0     | A little something to get you started  | Trivial    | 1/1    | ✅ Done   |
-
-More levels coming soon...
+![Hacker101 CTF](https://github.com/user-attachments/assets/4843244b-8ed9-4367-918f-f38012002369)
 
 ---
 
@@ -20,7 +12,7 @@ More levels coming soon...
 
 Each level has its own folder containing:
 - `solution.md` – the walkthrough
-- `screenshot.png` – (optional) screenshots of the process
+- `screenshot.png` – screenshots of the process
 
 ---
 
