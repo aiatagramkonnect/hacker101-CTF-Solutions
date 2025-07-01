@@ -90,17 +90,6 @@ This repository demonstrates practical application of:
 
 ---
 
-## 📊 Progress Tracker
-
-| Difficulty | Completed | Total | Progress |
-|------------|-----------|-------|----------|
-| Trivial    | 2         | 2     | ✅ 100%  |
-| Easy       | 1         | 4     | 🟡 25%   |
-| Moderate   | 0         | 6     | ⏳ 0%    |
-| Hard       | 0         | 3     | ⏳ 0%    |
-
-**Total Points Earned:** 🏆 [Update as you progress]
-
 ---
 
 ## 🎓 Learning Approach
@@ -168,17 +157,6 @@ These writeups are intended for:
 
 ---
 
-## 📬 Connect & Follow
-
-If you found these writeups helpful or have questions:
-
-- 💼 **LinkedIn:** [Your LinkedIn Profile]
-- 🐦 **Twitter:** [@YourHandle]
-- 📧 **Email:** your.email@domain.com
-- 🌐 **Website:** [Your Portfolio/Blog]
-
----
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -191,6 +169,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 *Remember: The best hackers are the ones who never stop learning.*
 
-[![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red?style=for-the-badge)](https://github.com/yourusername)
+[![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red?style=for-the-badge)](https://github.com/CyberNilsen)
 
 </div>
