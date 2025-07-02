@@ -60,7 +60,7 @@ I started by testing how the application handles different inputs and observing 
 Using Burp Suite to intercept and modify requests:
 
 1. **Intercepted Request**: Captured the form submission
-2. **Modified Input**: Changed the input to a single character "d"
+2. **Modified Input**: Changed the encryped form input to a single character "d"
 3. **Observed Response**: Analyzed how the encryption changed with minimal input
 4. **Flag Discovery**: The manipulation revealed the first flag
 
