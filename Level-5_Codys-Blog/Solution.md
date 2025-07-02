@@ -80,7 +80,7 @@ For the final flag, I needed to read the source code of the application. I went 
 <?php echo ("index.php")?>
 ```
 
-After submitting these comments, they appeared in the admin panel but weren't visible on the client side. I realized I needed to find a way to make the comments execute properly.
+After submitting these comments, they appeared in the admin panel but weren't visible on the client side. I realized I needed to find a way to make the comments execute properly. The picture below is after i have approved the comments from the admin panel.
 
 ![Approved Comments](ApprovedComments.png)
 
