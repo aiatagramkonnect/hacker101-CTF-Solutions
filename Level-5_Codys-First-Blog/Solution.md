@@ -34,8 +34,8 @@ However, when I tried to exploit these paths, I encountered inclusion errors, in
 
 ---
 
-## 🚩 Step 2: First Flag - Log Poisoning via Comment Section
-Instead of continuing with the LFI approach, I pivoted to the comment section. I realized I could potentially poison log files by injecting PHP code through user input.
+## 🚩 Step 2: First Flag - Direct PHP Code Execution via Comments
+Instead of continuing with the LFI approach, I pivoted to the comment section. I realized I could potentially inject PHP code directly through user input.
 
 I submitted the following PHP payload in the comment form:
 ```php
@@ -48,7 +48,7 @@ I submitted the following PHP payload in the comment form:
 
 ---
 
-## 🔐 Step 3: Second Flag - Admin Panel Access
+## 🔐 Step 3: Second Flag - Admin Panel Authentication Bypass
 Next, I investigated the admin login page that was referenced in the HTML source:
 ```html
 <!--<a href="?page=admin.auth.inc">Admin login</a>-->
@@ -57,24 +57,26 @@ Next, I investigated the admin login page that was referenced in the HTML source
 I tried accessing `?page=admin.auth.inc` but it seemed to require authentication. However, I had a hunch about the file structure. I tried removing the "auth" portion from the URL:
 
 **Before:** `?page=admin.auth.inc`
+
 ![Admin Auth Required](AdminAuthInc.png)
 
 **After:** `?page=admin.inc`
+
 ![Admin Panel Access](AdminAuth.png)
 
 This bypassed the authentication entirely! The admin panel was accessible, and the second flag was displayed right there.
 
 ---
 
-## 📝 Step 4: Third Flag - Source Code Disclosure
+## 📝 Step 4: Third Flag - Source Code Disclosure via Remote File Inclusion
 For the final flag, I needed to read the source code of the application. I went back to the comment section and tried various PHP payloads to read files:
 
 ```php
 <?php echo readfile("index.php")?>
-<?php echo ("index.php")?>
+<?php echo file_get_contents("index.php")?>
 ```
 
-After submitting these comments, they appeared in the admin panel but weren't visible on the client side. I realized I needed to find a way to make the comments execute properly.
+After submitting these comments, they appeared in the admin panel but weren't visible on the client side. I realized I needed to find a way to make the comments execute properly. The picture below shows the approved comments from the admin panel:
 
 ![Approved Comments](ApprovedComments.png)
 
@@ -87,12 +89,44 @@ This made the comments execute properly, and when I checked the source code of t
 
 ![Source Code Flag](SourceCodeFlag.png)
 
+### 🔬 Technical Explanation: Why This Works
+
+This technique exploits a **Remote File Inclusion (RFI)** vulnerability combined with PHP's HTTP wrapper functionality. Here's the breakdown:
+
+**1. PHP Configuration Requirements:**
+- The server has `allow_url_include` enabled in PHP configuration
+- This allows `include()` and `require()` functions to fetch files via HTTP URLs
+
+**2. Self-Referential HTTP Inclusion:**
+When you access `/?page=http://localhost/index`, the vulnerable code becomes:
+```php
+include('http://localhost/index.php');
+```
+
+**3. The Execution Flow:**
+- Your browser requests `/?page=http://localhost/index`
+- PHP's `include()` makes an HTTP request to `http://localhost/index.php` (itself)
+- This creates a **self-referential inclusion** where the server includes its own content
+- The HTTP wrapper processes the request differently than direct file system access
+
+**4. Why Comments Execute This Time:**
+- The HTTP wrapper inclusion triggers a fresh execution context
+- Previously injected PHP code in comments gets properly parsed and executed
+- The combination of HTTP processing + PHP execution reveals both the source code AND executes embedded PHP
+
+**5. Source Code Exposure:**
+- The HTTP wrapper approach bypasses certain local file restrictions
+- Raw PHP source becomes visible in the response
+- Any embedded flags in the source code are exposed
+
+This is a classic example of how misconfigurations (`allow_url_include` + poor input validation) can lead to both Remote Code Execution and source code disclosure.
+
 ---
 
 ## 🏁 Captured Flags
 - **Flag 1:** Found through direct PHP code execution in comments
 - **Flag 2:** Discovered by bypassing admin authentication 
-- **Flag 3:** Retrieved through source code disclosure via comment injection
+- **Flag 3:** Retrieved through source code disclosure via Remote File Inclusion
 
 ---
 
@@ -101,7 +135,15 @@ This challenge demonstrated multiple web vulnerabilities:
 
 1. **Code Injection:** The comment system directly executed PHP code without sanitization
 2. **Authentication Bypass:** Removing "auth" from the admin URL bypassed security
-3. **Local File Inclusion:** Combined with code injection to read source files
+3. **Remote File Inclusion (RFI):** Combined with HTTP wrapper exploitation to read source files
 4. **Improper Input Validation:** Multiple injection points throughout the application
 
-The key lesson is that web applications using PHP's `include()` function with user input are extremely dangerous, especially when combined with insufficient input validation and authentication mechanisms.
+The key lesson is that web applications using PHP's `include()` function with user input are extremely dangerous, especially when combined with insufficient input validation and authentication mechanisms. The combination of `allow_url_include` being enabled and poor input sanitization created a perfect storm for multiple attack vectors.
+
+---
+
+## 🛠️ Tools Used
+- **ffuf** - For fuzzing LFI vulnerabilities
+- **curl** - For making HTTP requests and testing payloads
+- **SecLists** - For comprehensive wordlists
+- **Browser Developer Tools** - For source code inspection
