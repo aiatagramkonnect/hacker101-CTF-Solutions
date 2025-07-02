@@ -57,9 +57,11 @@ Next, I investigated the admin login page that was referenced in the HTML source
 I tried accessing `?page=admin.auth.inc` but it seemed to require authentication. However, I had a hunch about the file structure. I tried removing the "auth" portion from the URL:
 
 **Before:** `?page=admin.auth.inc`
+<br>
 ![Admin Auth Required](AdminAuthInc.png)
 
 **After:** `?page=admin.inc`
+<br>
 ![Admin Panel Access](AdminAuth.png)
 
 This bypassed the authentication entirely! The admin panel was accessible, and the second flag was displayed right there.
