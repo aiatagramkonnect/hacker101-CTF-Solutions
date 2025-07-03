@@ -1,7 +1,7 @@
 # Postbook
 **Difficulty:** Easy  
 **Category:** Web  
-**Flags:** 6/7
+**Flags:** 7/7
 
 ---
 
