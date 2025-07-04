@@ -1,187 +1,190 @@
-# E-commerce CTF Challenge
-**Difficulty:** [To be updated]  
+# Petshop Pro
+**Difficulty:** Easy  
 **Category:** Web  
-**Flags:** 1/3 (Partial completion)
+**Flags:** 1/3 (In Progress)
 
 ---
 
 ## 🧠 Thought Process
-This challenge appeared to be an e-commerce application with shopping cart functionality, administrative panels, and user-generated content features. Based on the hints provided, I identified three main attack vectors:
+When I first accessed the Petshop Pro application, I immediately examined the shopping cart functionality based on the hint about checkout appearing "out of place." The application appeared to be an e-commerce platform selling pets with a shopping cart system, user authentication, and administrative capabilities.
 
-1. **Price manipulation** in the checkout process
-2. **Administrative panel access** through credential attacks
-3. **Cross-Site Scripting (XSS)** in user input fields
+The hints provided clear direction:
+1. *"Something looks out of place with checkout"*
+2. *"It's always nice to get free stuff"*
+3. *"There must be a way to administer the app"*
 
-The challenge required a combination of request manipulation, brute force attacks, and XSS exploitation to capture all flags.
+This suggested three main attack vectors:
+1. **Price manipulation** or checkout bypass vulnerabilities
+2. **Administrative panel** discovery and authentication bypass
+3. **Cross-Site Scripting (XSS)** for the final flag
 
 ---
 
 ## 🔍 Step 1: Initial Reconnaissance
-I started by exploring the application's functionality, focusing on the shopping cart and checkout process based on the first hint mentioning that "Something looks out of place with checkout" and "It's always nice to get free stuff."
+I started by exploring the application's functionality, focusing on the shopping cart and checkout process. The application allowed users to add pets (kittens and puppies) to their cart and proceed through a checkout process.
 
-Initial observations:
-- E-commerce platform with product catalog (kittens and puppies)
-- Shopping cart functionality
-- Checkout process with price calculations
-- Administrative login panel
-- User input fields for comments/reviews
+Key observations:
+- Shopping cart functionality with pet selection
+- Checkout process with potential price manipulation
+- Administrative login functionality
+- Image editing capabilities
 
 ---
 
 ## 🚩 Step 2: First Flag - Price Manipulation via Request Tampering
-**Hint Analysis:**
-- *"Something looks out of place with checkout"*
-- *"It's always nice to get free stuff"*
+Following the hint about checkout looking "out of place," I investigated the checkout process with items in my cart. Initially, checking out without any items didn't reveal anything suspicious.
 
-This strongly suggested a price manipulation vulnerability in the checkout process.
+However, when I added a kitten and puppy to my cart and intercepted the checkout request with Burp Suite, I discovered something interesting in the request parameters.
 
-**Exploitation Process:**
-1. Added items to cart (kitten and puppy)
-2. Proceeded to checkout
-3. Intercepted the checkout request using Burp Suite
-4. Analyzed the request parameters for price-related fields
-
-**Discovery:**
-When examining the checkout request with Burp Suite, I found suspicious parameters that controlled the pricing. The highlighted content in the intercepted request revealed price manipulation was possible.
+**Discovery Process:**
+1. Added kitten and puppy to shopping cart
+2. Proceeded to checkout while intercepting with Burp Suite
+3. Analyzed the request parameters and found manipulatable price values
+4. Modified the request to alter the total cost
 
 ![Modified Request](ModifiedRequest.png)
 
-**Successful Exploitation:**
-By modifying the price parameters in the intercepted request, I was able to manipulate the total cost, essentially getting the items for free. After sending the modified request, the first flag was revealed.
+The intercepted request revealed that price information was being passed as client-side parameters, making it vulnerable to tampering. By modifying these values, I could potentially get the items for free or at a reduced price.
+
+After sending the modified request, I successfully completed the checkout and obtained the first flag.
 
 ![Cart Checkout](CartCheckout.png)
 
 ### 🔬 Technical Explanation: Client-Side Price Manipulation
 
-This vulnerability occurs when e-commerce applications trust client-side data for critical calculations like pricing. Common implementation flaws include:
+This vulnerability occurs when e-commerce applications trust client-side data for critical operations like pricing. Common issues include:
 
-1. **Client-Side Price Storage:** Prices stored in hidden form fields or JavaScript variables
-2. **Inadequate Server-Side Validation:** No verification of price integrity on the server
-3. **Trust in HTTP Parameters:** Direct use of client-submitted price data
-4. **Missing Price Lookups:** Not re-calculating prices based on product IDs server-side
+1. **Client-Side Price Storage:** Prices stored in hidden form fields or client-side variables
+2. **Lack of Server-Side Validation:** No verification of price integrity on the backend
+3. **Direct Parameter Acceptance:** Server accepts price values directly from client requests
+4. **Missing Business Logic Validation:** No checks against legitimate product prices
 
-**Attack Vector:**
-- Intercept checkout requests using proxy tools
-- Modify price parameters to reduce or zero out costs
-- Submit tampered requests to complete fraudulent transactions
+This allows attackers to modify prices, apply unauthorized discounts, or even get products for free.
 
 ---
 
-## 🔐 Step 3: Second Flag - Administrative Panel Access (In Progress)
-**Hint Analysis:**
-- *"There must be a way to administer the app"*
+## 🔐 Step 3: Second Flag - Administrative Panel Discovery and Authentication
+The second hint indicated: *"There must be a way to administer the app"*
 
-This indicated the existence of an administrative interface that required credential-based access.
+I began searching for administrative functionality using both automated and manual approaches.
 
-**Discovery Process:**
-1. **Directory Enumeration:** Attempted to locate admin panels using dirsearch
-2. **Manual Path Discovery:** Quickly identified `/login` as the administrative login page
+**Discovery Methods:**
+1. **Manual URL Guessing:** Tried common admin paths like `/admin`, `/login`, `/administrator`
+2. **Directory Enumeration:** Considered using tools like dirsearch for comprehensive discovery
+
+I successfully discovered the administrative login page at `/login`.
 
 ![Login Page](Login.png)
 
-**Attack Strategy:**
-I attempted multiple approaches to gain administrative access:
+**Authentication Bypass Attempts:**
+1. **Brute Force Attack:** Attempted to brute force both username and password fields
+2. **Tool Selection:** Initially tried Burp Suite but found it too slow for this task
+3. **Hydra Alternative:** Considered switching to Hydra for faster brute force attacks
+4. **SQL Injection Testing:** Attempted common SQL injection payloads but found the application had protection against basic injections
 
-1. **Credential Brute Force:** 
-   - Initially used Burp Suite for brute force attacks
-   - Found Burp Suite too slow for this task
-   - Switched to Hydra for more efficient brute forcing
-   - Targeted both username and password fields
+**Note:** While brute forcing worked in this CTF environment, this approach would be problematic in real-world scenarios due to:
+- Rate limiting mechanisms
+- IP-based blocking
+- Account lockout policies
+- Intrusion detection systems
 
-2. **SQL Injection Testing:**
-   - Attempted common SQL injection payloads
-   - Found that basic SQL injection techniques were blocked or protected
-   - Application appeared to have some SQL injection mitigation
-
-**Current Status:**
-- Administrative login page identified
-- Brute force attack methodology established
-- SQL injection protection confirmed
-- **Flag not yet captured** due to time constraints of brute force process
-
-**Note:** In real-world scenarios, aggressive brute force attacks would trigger rate limiting, IP bans, or account lockouts. This approach only works in CTF environments without such protections.
+**Status:** Flag 2 requires successful authentication to the admin panel. The brute force approach is time-consuming but feasible in this CTF context.
 
 ---
 
-## ✏️ Step 4: Third Flag - Cross-Site Scripting (XSS) Exploitation (Theory)
-**Discovery:**
-During exploration, I found an interesting endpoint: `edit?id=0`
+## 🖼️ Step 4: Unauthorized Access Discovery
+During my exploration, I discovered an interesting endpoint that allows unauthorized access to administrative functions:
 
-This endpoint allowed editing of pictures/content even without administrative privileges, suggesting an authorization bypass vulnerability.
+**URL:** `/edit?id=0`
 
-**Planned XSS Attack Vector:**
-1. **Injection Point:** User comments or picture upload/edit functionality
-2. **Payload Delivery:** Inject XSS payload through comment system or image metadata
-3. **Trigger Mechanism:** Save malicious content and revisit the page
-4. **Flag Extraction:** XSS payload executes and reveals the flag
+This endpoint allows editing of images/content even without admin authentication, representing a significant authorization bypass vulnerability.
 
-**Potential XSS Locations:**
-- Comment sections on product pages
-- Image upload/edit functionality
-- User profile fields
-- Product review systems
+### 🔬 Technical Explanation: Insecure Direct Object Reference (IDOR)
 
-**Current Status:**
-- XSS injection points identified
-- Attack methodology planned
-- **Flag not yet captured** due to incomplete implementation
+This vulnerability demonstrates an **Insecure Direct Object Reference (IDOR)** where:
+1. **Missing Access Controls:** No verification of user permissions before allowing access
+2. **Direct Object Access:** Direct access to resources via URL parameters
+3. **Insufficient Authorization:** Authentication bypass for administrative functions
+4. **Parameter Manipulation:** Ability to access different resources by changing ID values
 
 ---
 
-## 🔧 Tools and Techniques Used
-- **Burp Suite** - For request interception and modification
-- **Hydra** - For credential brute force attacks
-- **Dirsearch** - For directory enumeration (attempted)
-- **Manual Testing** - For path discovery and vulnerability identification
+## 🎯 Step 5: Third Flag - Cross-Site Scripting (XSS) Approach
+For the final flag, the approach involves exploiting Cross-Site Scripting vulnerabilities:
+
+**Planned Attack Vector:**
+1. **Comment XSS:** Inject malicious scripts into comment fields
+2. **Image Upload XSS:** Embed XSS payloads in image metadata or descriptions
+3. **Stored XSS:** Create persistent XSS that triggers when admin views the content
+
+**Process:**
+1. Add XSS payload to comments or image descriptions
+2. Save the malicious content
+3. Navigate back to trigger the XSS
+4. Capture the flag when the payload executes
+
+**Status:** This approach requires further testing and payload refinement.
 
 ---
 
 ## 🏁 Captured Flags
-- **Flag 1:** ✅ Price manipulation through request tampering
-- **Flag 2:** ❌ Administrative access (brute force in progress)
-- **Flag 3:** ❌ XSS exploitation (methodology identified)
+- **Flag 1:** ✅ Obtained through price manipulation in checkout process
+- **Flag 2:** 🔄 In progress - requires admin authentication bypass
+- **Flag 3:** 🔄 In progress - requires XSS exploitation
 
 ---
 
 ## ✅ Summary
-This challenge demonstrated several common web application vulnerabilities:
+This challenge demonstrates several common web application vulnerabilities:
 
-### Successfully Exploited:
-1. **Price Manipulation:** Client-side price control allowing fraudulent transactions
+### Discovered Vulnerabilities:
+1. **Client-Side Price Manipulation:** Trust in client-side data for critical business logic
+2. **Insecure Direct Object Reference:** Unauthorized access to administrative functions
+3. **Weak Authentication:** Susceptible to brute force attacks
+4. **Potential XSS:** Comment and image upload functionality may be vulnerable
 
-### Identified but Not Completed:
-2. **Weak Authentication:** Administrative panel susceptible to brute force attacks
-3. **Authorization Bypass:** Ability to edit content without proper permissions
-4. **Cross-Site Scripting:** User input fields vulnerable to XSS injection
+### Security Implications:
+- **Financial Loss:** Price manipulation can lead to significant revenue loss
+- **Data Breach:** Administrative access bypass can expose sensitive information
+- **Account Takeover:** Weak authentication enables unauthorized access
+- **Cross-Site Scripting:** XSS can lead to session hijacking and data theft
 
-### Key Vulnerabilities:
-- **Insufficient Input Validation:** Price parameters trusted from client-side
-- **Weak Password Policies:** Administrative accounts vulnerable to dictionary attacks
-- **Missing Access Controls:** Edit functionality accessible without proper authorization
-- **Inadequate Output Encoding:** User content not properly sanitized
+### Root Causes:
+- **Insufficient Input Validation:** Client-side data trusted without server-side verification
+- **Missing Access Controls:** No proper authorization checks for administrative functions
+- **Weak Authentication Mechanisms:** Passwords susceptible to brute force
+- **Inadequate Output Encoding:** Potential XSS due to insufficient sanitization
+
+---
+
+## 🛠️ Tools Used
+- **Burp Suite** - For request interception and modification
+- **Hydra** - For brute force authentication attacks
+- **Manual Testing** - For discovering IDOR and XSS vulnerabilities
+- **Browser Developer Tools** - For analyzing client-side behavior
 
 ---
 
 ## 🔧 Prevention Recommendations
-1. **Server-Side Price Validation:** Always recalculate prices server-side based on product IDs
-2. **Strong Authentication:** Implement account lockouts, rate limiting, and strong password policies
-3. **Proper Authorization:** Verify user permissions for all sensitive operations
-4. **Input Sanitization:** Implement comprehensive XSS protection through proper encoding
-5. **Security Headers:** Deploy Content Security Policy (CSP) and other security headers
+1. **Server-Side Validation:** Always validate prices and business logic on the server
+2. **Proper Access Controls:** Implement role-based access control for administrative functions
+3. **Strong Authentication:** Use complex passwords and implement rate limiting
+4. **Input Sanitization:** Properly sanitize and validate all user inputs
+5. **Output Encoding:** Encode all user-generated content to prevent XSS
 
 ---
 
 ## 🎯 Key Learning Points
-- Client-side price manipulation is a critical vulnerability in e-commerce applications
-- Administrative panels are high-value targets requiring strong authentication
-- Authorization bypass vulnerabilities can lead to privilege escalation
-- XSS vulnerabilities in user-generated content can compromise application security
-- CTF environments allow aggressive testing techniques not suitable for real-world applications
+- E-commerce applications are particularly vulnerable to price manipulation attacks
+- Client-side data should never be trusted for critical business operations
+- IDOR vulnerabilities can provide unauthorized access to administrative functions
+- Multiple attack vectors often exist in a single application
+- CTF environments allow for aggressive testing that wouldn't be appropriate in production
 
 ---
 
-## 📝 Challenge Notes
-- This challenge requires significant time investment for brute force attacks
-- The difficulty level is moderate despite the time requirements
-- Multiple attack vectors provide good practice for comprehensive web application testing
-- Real-world applications would have additional protections making these attacks more difficult
+## 📋 Next Steps
+1. Complete brute force attack on admin panel for Flag 2
+2. Develop and test XSS payloads for Flag 3
+3. Document successful exploitation techniques
+4. Analyze additional attack vectors for comprehensive coverage
