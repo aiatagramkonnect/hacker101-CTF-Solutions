@@ -91,5 +91,3 @@ This challenge demonstrated the importance of **static analysis** in mobile appl
 - Always examine class files and source code when performing security assessments
 
 This challenge highlighted how easily secrets can be extracted from mobile applications through static analysis, emphasizing the importance of proper security practices in mobile development.
-
-test
