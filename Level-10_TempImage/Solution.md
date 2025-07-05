@@ -176,5 +176,3 @@ This challenge shares similarities with picoCTF file upload challenges but with 
 - **Streamlined Approach:** More straightforward exploitation path
 
 The core concepts remain the same: exploiting file upload functionality to achieve remote code execution through careful manipulation of file paths and content.
-
-test
