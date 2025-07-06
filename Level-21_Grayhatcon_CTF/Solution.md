@@ -2,7 +2,7 @@
 
 **Difficulty:** Moderate  
 **Category:** Web  
-**Flags:** 0/4  
+**Flags:** 1/4  
 **Status:** 🔄 Work in Progress
 
 ---
@@ -172,6 +172,74 @@ curl -H "X-Forwarded-For: 192.168.1.1, 8.8.8.8" [URL]
 
 ---
 
-**Challenge Status: 🔄 In Progress (0/4 flags captured)**
+## 🎯 Flag 2: Account Takeover via Owner Hash Manipulation
 
-*Need to continue experimenting with different IP spoofing techniques and headers to bypass the .htaccess restrictions.*
+### Step 1: User Enumeration
+I discovered that the application has a password reset functionality. Using this feature, I attempted to reset the password for the user "hunter" (who was mentioned as selling the Username/Password List).
+
+### Step 2: Hash Extraction
+When submitting a password reset request for the user "hunter" through Burp Suite, I captured the following response containing the account hash:
+
+```
+cf505baebbaf25a0a4c63eb93331eb36
+```
+
+![Burp Suite Hash Capture](Burpsuite.png)
+
+### Step 3: Account Creation Exploit
+I discovered that during the account creation process, I could manipulate the `owner_hash` parameter to create a sub-account under the "hunter" user.
+
+**Exploit Payload:**
+```
+owner_hash=cf505baebbaf25a0a4c63eb93331eb36&new_username=[my_username]
+```
+
+By injecting the `owner_hash` parameter before the `new_username` parameter, I successfully created an account that was associated with the "hunter" user as a sub-account.
+
+### Step 4: Flag Capture
+After creating the sub-account under "hunter", I was able to access the second flag:
+
+![Second Flag](SecondFlag.png)
+
+**Second Flag Captured! 🎉**
+
+---
+
+## 🔐 Vulnerabilities Exploited (Flag 2)
+
+1. **Information Disclosure** - Password reset function leaked account hashes
+2. **Insecure Direct Object References** - Account creation accepted arbitrary owner_hash values
+3. **Insufficient Input Validation** - No validation of owner_hash parameter during account creation
+4. **Privilege Escalation** - Created sub-account under target user to gain access
+
+---
+
+## 🛠️ Tools Used
+
+- **Burp Suite** - For intercepting and modifying HTTP requests
+- **dirsearch** - Directory enumeration
+- **curl** - HTTP request manipulation
+
+---
+
+## 📚 Key Learning Points
+
+1. **Password Reset Functions** can leak sensitive information like user hashes
+2. **Parameter Manipulation** during account creation can lead to privilege escalation
+3. **Hash-based Authorization** systems need proper validation
+4. **Information Disclosure** in one function can be chained with other vulnerabilities
+
+---
+
+## 🎯 Current Challenge Status
+
+- ✅ **Flag 1** - Still working on .htaccess bypass
+- ✅ **Flag 2** - Account takeover via owner hash manipulation
+- ❌ **Flag 3** - Not yet discovered
+- ❌ **Flag 4** - Not yet discovered
+
+---
+
+**Challenge Status: 🔄 In Progress (1/4 flags captured)**
+
+*Flag 1 (.htaccess bypass) still needs different IP spoofing techniques. Flags 3 and 4 require further enumeration and exploitation.*
