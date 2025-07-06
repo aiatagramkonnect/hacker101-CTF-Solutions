@@ -61,7 +61,7 @@ After logging in, I needed to enable admin privileges on the client side. Here's
 
 With admin privileges enabled, I could now access the student management interface. The URL structure changed to include student identifiers, and I could see various student records.
 
-Clicking on "Brett" revealed his student profile and exposed an interesting pattern in the URL structure.
+Clicking on "Brett" revealed her student profile and exposed an interesting pattern in the URL structure.
 
 ![Brett's Profile](Brett.png)
 
