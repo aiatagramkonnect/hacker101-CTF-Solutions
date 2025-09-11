@@ -109,7 +109,7 @@ After enumerating the server files, I used the `cat` command to read various fil
 
 By examining the source code of `index.php`, I discovered the second flag embedded in the code.
 
-![Index](Index.png)
+![Index](index.png)
 
 ---
 
